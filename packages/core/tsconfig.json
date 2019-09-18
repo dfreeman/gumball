@@ -4,18 +4,18 @@
     "tsBuildInfoFile": ".tsbuildinfo",
     "target": "ES2019",
     "module": "ES2015",
-    "rootDir": "src",
-    "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
     "declaration": true,
     "baseUrl": ".",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "lib": [
+      "es2018"
+    ]
   },
   "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "src/**/*.test.ts"
+    "src",
+    "tests"
   ]
 }

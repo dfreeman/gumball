@@ -1,6 +1,7 @@
-import { Flags, Registers } from './cpu';
+import { Flags, Registers } from '../src/cpu-registers';
+import { byte, word } from '../src/sized';
 
-describe('CPU Flags', () => {
+describe('Flags', () => {
   test('z flag', () => {
     let flags = new Flags();
 
@@ -17,7 +18,7 @@ describe('CPU Flags', () => {
     expect(flags.value).toBe(0);
     expect(flags.z).toBe(0);
 
-    flags.value = 0b10110000;
+    flags.value = byte(0b10110000);
 
     expect(flags.z).toBe(1);
 
@@ -42,7 +43,7 @@ describe('CPU Flags', () => {
     expect(flags.value).toBe(0);
     expect(flags.n).toBe(0);
 
-    flags.value = 0b11010000;
+    flags.value = byte(0b11010000);
 
     expect(flags.n).toBe(1);
 
@@ -67,7 +68,7 @@ describe('CPU Flags', () => {
     expect(flags.value).toBe(0);
     expect(flags.h).toBe(0);
 
-    flags.value = 0b10110000;
+    flags.value = byte(0b10110000);
 
     expect(flags.h).toBe(1);
 
@@ -92,7 +93,7 @@ describe('CPU Flags', () => {
     expect(flags.value).toBe(0);
     expect(flags.c).toBe(0);
 
-    flags.value = 0b10110000;
+    flags.value = byte(0b10110000);
 
     expect(flags.c).toBe(1);
 
@@ -102,7 +103,7 @@ describe('CPU Flags', () => {
   });
 });
 
-describe('CPU Registers', () => {
+describe('Registers', () => {
   test('b, c, bc registers', () => {
     let registers = new Registers();
 
@@ -110,19 +111,19 @@ describe('CPU Registers', () => {
     expect(registers.c).toBe(0);
     expect(registers.bc).toBe(0);
 
-    registers.b = 0xa5;
+    registers.b = byte(0xa5);
 
     expect(registers.b).toBe(0xa5);
     expect(registers.c).toBe(0);
     expect(registers.bc).toBe(0xa500);
 
-    registers.c = 0x9e;
+    registers.c = byte(0x9e);
 
     expect(registers.b).toBe(0xa5);
     expect(registers.c).toBe(0x9e);
     expect(registers.bc).toBe(0xa59e);
 
-    registers.bc = 0xb388;
+    registers.bc = word(0xb388);
 
     expect(registers.b).toBe(0xb3);
     expect(registers.c).toBe(0x88);
@@ -136,19 +137,19 @@ describe('CPU Registers', () => {
     expect(registers.e).toBe(0);
     expect(registers.de).toBe(0);
 
-    registers.d = 0xa5;
+    registers.d = byte(0xa5);
 
     expect(registers.d).toBe(0xa5);
     expect(registers.e).toBe(0);
     expect(registers.de).toBe(0xa500);
 
-    registers.e = 0x9e;
+    registers.e = byte(0x9e);
 
     expect(registers.d).toBe(0xa5);
     expect(registers.e).toBe(0x9e);
     expect(registers.de).toBe(0xa59e);
 
-    registers.de = 0xb388;
+    registers.de = word(0xb388);
 
     expect(registers.d).toBe(0xb3);
     expect(registers.e).toBe(0x88);
@@ -162,19 +163,19 @@ describe('CPU Registers', () => {
     expect(registers.l).toBe(0);
     expect(registers.hl).toBe(0);
 
-    registers.h = 0xa5;
+    registers.h = byte(0xa5);
 
     expect(registers.h).toBe(0xa5);
     expect(registers.l).toBe(0);
     expect(registers.hl).toBe(0xa500);
 
-    registers.l = 0x9e;
+    registers.l = byte(0x9e);
 
     expect(registers.h).toBe(0xa5);
     expect(registers.l).toBe(0x9e);
     expect(registers.hl).toBe(0xa59e);
 
-    registers.hl = 0xb388;
+    registers.hl = word(0xb388);
 
     expect(registers.h).toBe(0xb3);
     expect(registers.l).toBe(0x88);
@@ -185,25 +186,25 @@ describe('CPU Registers', () => {
     let registers = new Registers();
 
     expect(registers.a).toBe(0);
-    expect(registers.flags.value).toBe(0);
+    expect(registers.f.value).toBe(0);
     expect(registers.af).toBe(0);
 
-    registers.a = 0xa5;
+    registers.a = byte(0xa5);
 
     expect(registers.a).toBe(0xa5);
-    expect(registers.flags.value).toBe(0);
+    expect(registers.f.value).toBe(0);
     expect(registers.af).toBe(0xa500);
 
-    registers.flags.value = 0x9e;
+    registers.f.value = byte(0x9e);
 
     expect(registers.a).toBe(0xa5);
-    expect(registers.flags.value).toBe(0x9e);
+    expect(registers.f.value).toBe(0x9e);
     expect(registers.af).toBe(0xa59e);
 
-    registers.af = 0xb388;
+    registers.af = word(0xb388);
 
     expect(registers.a).toBe(0xb3);
-    expect(registers.flags.value).toBe(0x88);
+    expect(registers.f.value).toBe(0x88);
     expect(registers.af).toBe(0xb388);
   });
 });
