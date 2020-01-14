@@ -1,5 +1,5 @@
 declare const Unique: unique symbol;
-export type Unique<T, Tag> = T & { [Unique]: Tag };
+type Unique<T, Tag> = T & { [Unique]: Tag };
 
 // These utilities help prevent silly, hard-to-track-down
 // mistakes like reading one byte as an opcode operand

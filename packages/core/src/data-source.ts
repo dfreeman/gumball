@@ -86,7 +86,7 @@ export type RegisterBankDataSource<K extends string> = DataSource & Record<K, By
  * and optionally limiting which bits of a register may be written
  * through the numeric address space.
  */
-export function registerBank<K extends string>(registers: Array<RegisterDefinition<K>>): RegisterBankDataSource<K> {
+export function registers<K extends string>(registers: Array<RegisterDefinition<K>>): RegisterBankDataSource<K> {
   let data = new Uint8Array(Math.max(...registers.map(r => r.address)) + 1);
   let index = registers.reduce(
     (acc, register) => {
@@ -131,3 +131,27 @@ export function registerBank<K extends string>(registers: Array<RegisterDefiniti
 
   return result;
 }
+
+/**
+ * Creates a data source that is only accessible when the given
+ * predicate is true, ignoring writes and returning `0xff` for
+ * reads otherwise.
+ */
+export function guard(underlying: DataSource, guard: () => unknown): DataSource {
+  return {
+    readByte(address: number): Byte {
+      if (guard()) {
+        return underlying.readByte(address);
+      } else {
+        return 0xff;
+      }
+    },
+
+    writeByte(address: number, value: Byte): void {
+      if (guard()) {
+        underlying.writeByte(address, value);
+      }
+    }
+  }
+}
+

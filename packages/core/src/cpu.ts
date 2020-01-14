@@ -100,26 +100,13 @@ export default class CPU {
     return this.ime;
   }
 
-  /**
-   * Executes instructions until the specified number of clock cycles has
-   * been spent or a `STOP` or `HALT` instruction has been executed,
-   * returning the number of cycles elapsed.
-   */
-  public step(window: number): number {
-    let total = 0;
-    while (total < window && this.state === State.Running) {
-      let opcode = this.memory.readByte(this.registers.pc);
-      let instruction = CPU.instructions[opcode];
+  public step(): number {
+    let opcode = this.memory.readByte(this.registers.pc);
+    let instruction = CPU.instructions[opcode];
 
-      this.incrementPC();
+    this.incrementPC();
 
-      total += instruction.invoke(this);
-
-      if (this.isHalted || this.isStopped) {
-        break;
-      }
-    }
-    return total;
+    return instruction.invoke(this);
   }
 
   /**

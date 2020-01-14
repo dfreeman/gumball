@@ -1,4 +1,4 @@
-import { nil, buffer, registerBank } from '../src/data-source';
+import { nil, buffer, registers } from '../src/data-source';
 
 describe('DataSource', () => {
   describe('nil', () => {
@@ -57,7 +57,7 @@ describe('DataSource', () => {
 
   describe('registerBank', () => {
     test('allows access via address or name', () => {
-      let dataSource = registerBank([{ address: 0, name: 'zero' }, { address: 1, name: 'one' }]);
+      let dataSource = registers([{ address: 0, name: 'zero' }, { address: 1, name: 'one' }]);
 
       expect(dataSource.readByte(0)).toBe(0);
       expect(dataSource.readByte(1)).toBe(0);
@@ -81,7 +81,7 @@ describe('DataSource', () => {
   });
 
   test('restricts writable bits when a `writeMask` is specified', () => {
-    let dataSource = registerBank([{ address: 0, name: 'register', writeMask: 0b11000001 }]);
+    let dataSource = registers([{ address: 0, name: 'register', writeMask: 0b11000001 }]);
 
     expect(dataSource.readByte(0)).toBe(0);
     expect(dataSource.register).toBe(0);
