@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2019",
-    "module": "ES2015",
+    "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "declaration": true,
@@ -9,8 +9,8 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "composite": true,
-    "lib": ["es2018"],
+    "lib": ["es2018", "dom"],
     "outDir": "dist"
   },
-  "include": ["src", "tests"]
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
 }
