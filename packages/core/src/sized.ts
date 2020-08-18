@@ -21,7 +21,7 @@ export type Byte = Unique<number, 'byte'> | 0 | 1 | 0xff;
 export type Word = Unique<number, 'word'> | 0 | 1 | 0xffff;
 
 export function bit(value: number | boolean): Bit {
-  return (+!!value & 0x1) as Bit;
+  return (Number(Boolean(value)) & 0x1) as Bit;
 }
 
 /**

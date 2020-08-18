@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
     "target": "ES2019",
     "module": "ES2015",
     "strict": true,
@@ -10,12 +8,9 @@
     "baseUrl": ".",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "lib": [
-      "es2018"
-    ]
+    "composite": true,
+    "lib": ["es2018"],
+    "outDir": "dist"
   },
-  "include": [
-    "src",
-    "tests"
-  ]
+  "include": ["src", "tests"]
 }

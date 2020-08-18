@@ -70,6 +70,7 @@ testInstruction('DI', {
   duration: 4,
   before(cpu) {
     cpu['ime'] = true;
+    expect(cpu.interruptsEnabled).toBe(true);
   },
   after(cpu) {
     expect(cpu.interruptsEnabled).toBe(false);
@@ -79,6 +80,10 @@ testInstruction('DI', {
 testInstruction('EI', {
   instruction: 0xfb,
   duration: 4,
+  before(cpu) {
+    cpu['ime'] = false;
+    expect(cpu.interruptsEnabled).toBe(false);
+  },
   after(cpu) {
     expect(cpu.interruptsEnabled).toBe(true);
   },

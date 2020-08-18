@@ -1,6 +1,16 @@
 {
   "private": true,
+  "scripts": {
+    "lint": "eslint . --cache",
+    "typecheck": "tsc --build",
+    "test": "yarn workspaces run test"
+  },
   "workspaces": [
     "packages/core"
-  ]
+  ],
+  "devDependencies": {
+    "@dfreeman/eslint-config": "^3.0.0",
+    "eslint": "^7.7.0",
+    "typescript": "^3.9.7"
+  }
 }

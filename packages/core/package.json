@@ -6,15 +6,11 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "eslint --ext ts,js .",
     "test": "jest"
   },
   "devDependencies": {
-    "@dfreeman/eslint-config": "^1.1.0",
     "@types/jest": "^24.0.18",
-    "eslint": "^6.3.0",
     "jest": "^24.9.0",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.6.3"
+    "ts-jest": "^24.0.2"
   }
 }

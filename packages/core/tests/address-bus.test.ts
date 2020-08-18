@@ -5,7 +5,10 @@ import { byte } from '../src/sized';
 describe('AddressBus', () => {
   test('rejects overlapping mappings', () => {
     expect(() => {
-      new AddressBus([{ offset: 0, length: 4, data: nil() }, { offset: 3, length: 1, data: nil() }]);
+      new AddressBus([
+        { offset: 0, length: 4, data: nil() },
+        { offset: 3, length: 1, data: nil() },
+      ]);
     }).toThrow('Address mapping overlap at 0x3');
   });
 
@@ -17,7 +20,10 @@ describe('AddressBus', () => {
   test('reads from mapped locations', () => {
     let a = buffer(0x10);
     let b = buffer(0x10);
-    let bus = new AddressBus([{ offset: 0, length: 0x10, data: a }, { offset: 0x10, length: 0x10, data: b }]);
+    let bus = new AddressBus([
+      { offset: 0, length: 0x10, data: a },
+      { offset: 0x10, length: 0x10, data: b },
+    ]);
 
     for (let i = 0; i < 0x10; i++) {
       a.writeByte(i, byte(Math.floor(Math.random() * 0xff)));
@@ -33,7 +39,10 @@ describe('AddressBus', () => {
   test('writes to mapped locations', () => {
     let a = buffer(0x10);
     let b = buffer(0x10);
-    let bus = new AddressBus([{ offset: 0, length: 0x10, data: a }, { offset: 0x10, length: 0x10, data: b }]);
+    let bus = new AddressBus([
+      { offset: 0, length: 0x10, data: a },
+      { offset: 0x10, length: 0x10, data: b },
+    ]);
 
     for (let i = 0; i < 0x20; i++) {
       bus.writeByte(i, byte(i));

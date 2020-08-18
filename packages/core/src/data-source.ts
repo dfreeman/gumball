@@ -87,14 +87,11 @@ export type RegisterBankDataSource<K extends string> = DataSource & Record<K, By
  * through the numeric address space.
  */
 export function registerBank<K extends string>(registers: Array<RegisterDefinition<K>>): RegisterBankDataSource<K> {
-  let data = new Uint8Array(Math.max(...registers.map(r => r.address)) + 1);
-  let index = registers.reduce(
-    (acc, register) => {
-      acc[register.address] = register;
-      return acc;
-    },
-    {} as Record<number, RegisterDefinition<string>>
-  );
+  let data = new Uint8Array(Math.max(...registers.map((r) => r.address)) + 1);
+  let index = registers.reduce((acc, register) => {
+    acc[register.address] = register;
+    return acc;
+  }, {} as Record<number, RegisterDefinition<string>>);
 
   let result = {
     readByte(address: number): Byte {
@@ -102,9 +99,9 @@ export function registerBank<K extends string>(registers: Array<RegisterDefiniti
     },
 
     writeByte(address: number, value: Byte): void {
-      let register = index[address];
-      if (register && typeof register.writeMask === 'number') {
-        data[address] = (value & register.writeMask) + (data[address] & ~register.writeMask);
+      let writeMask = index[address]?.writeMask;
+      if (typeof writeMask === 'number') {
+        data[address] = (value & writeMask) + (data[address] & ~writeMask);
       } else {
         data[address] = value;
       }
@@ -113,20 +110,17 @@ export function registerBank<K extends string>(registers: Array<RegisterDefiniti
 
   Object.defineProperties(
     result,
-    registers.reduce(
-      (acc, register) => {
-        acc[register.name] = {
-          get() {
-            return data[register.address];
-          },
-          set(value: Byte) {
-            data[register.address] = value;
-          },
-        };
-        return acc;
-      },
-      {} as PropertyDescriptorMap
-    )
+    registers.reduce((acc, register) => {
+      acc[register.name] = {
+        get() {
+          return data[register.address];
+        },
+        set(value: Byte) {
+          data[register.address] = value;
+        },
+      };
+      return acc;
+    }, {} as PropertyDescriptorMap),
   );
 
   return result;

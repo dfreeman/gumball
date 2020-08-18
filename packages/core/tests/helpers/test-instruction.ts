@@ -12,7 +12,7 @@ type PartialState = {
 };
 
 type TestInstructionOptions = {
-  instruction: number | number[];
+  instruction: number | Array<number>;
   duration: number | ((flags: Flags) => number);
   size?: number;
   effect?(start: State): PartialState;
@@ -129,7 +129,7 @@ function getState(registers: Registers, baseMemory: MemoryState, memoryOverrides
 }
 
 type SeededDataSource = DataSource & { currentState(): MemoryState; initialState(): MemoryState };
-function seededDataSource(initial: number[], seed: () => number): SeededDataSource {
+function seededDataSource(initial: Array<number>, seed: () => number): SeededDataSource {
   let initialMemory = new Map<number, Byte>(initial.map((value, i) => [i, byte(value)]));
   let currentMemory = new Map(initialMemory.entries());
 

@@ -21,8 +21,8 @@ export type AddressMapping = {
 export default class AddressBus implements DataSource {
   private lookup: Array<AddressMapping | undefined>;
 
-  constructor(mappings: Array<AddressMapping>) {
-    this.lookup = Array(Math.max(...mappings.map(m => m.offset + m.length)));
+  public constructor(mappings: Array<AddressMapping>) {
+    this.lookup = Array(Math.max(...mappings.map((m) => m.offset + m.length)));
 
     for (let mapping of mappings) {
       for (let i = mapping.offset, end = mapping.offset + mapping.length; i < end; i++) {

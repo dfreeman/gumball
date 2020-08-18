@@ -3,7 +3,7 @@ import { word, byte } from '../../src/sized';
 
 testInstruction('RET NZ', {
   instruction: 0xc0,
-  duration: flags => (flags.z ? 8 : 20),
+  duration: (flags) => (flags.z ? 8 : 20),
   effect: ({ sp, pc, memory, flags }) => ({
     pc: flags.z ? word(pc + 1) : word(memory[sp] + (memory[sp + 1] << 8)),
     sp: flags.z ? sp : word(sp + 2),
@@ -21,7 +21,7 @@ testInstruction('POP BC', {
 
 testInstruction('CALL NZ, a16', {
   instruction: 0xc4,
-  duration: flags => (flags.z ? 12 : 24),
+  duration: (flags) => (flags.z ? 12 : 24),
   size: 3,
   effect: ({ sp, memory, pc, flags }) => ({
     sp: flags.z ? sp : word(sp - 2),
@@ -49,7 +49,7 @@ testInstruction('PUSH BC', {
 
 testInstruction('RET Z', {
   instruction: 0xc8,
-  duration: flags => (flags.z ? 20 : 8),
+  duration: (flags) => (flags.z ? 20 : 8),
   effect: ({ memory, sp, pc, flags }) => ({
     pc: flags.z ? word(memory[sp] + (memory[sp + 1] << 8)) : word(pc + 1),
     sp: flags.z ? word(sp + 2) : sp,
@@ -67,7 +67,7 @@ testInstruction('RET', {
 
 testInstruction('CALL Z, a16', {
   instruction: 0xcc,
-  duration: flags => (flags.z ? 24 : 12),
+  duration: (flags) => (flags.z ? 24 : 12),
   size: 3,
   effect: ({ sp, memory, pc, flags }) => ({
     sp: flags.z ? word(sp - 2) : sp,
@@ -97,7 +97,7 @@ testInstruction('CALL a16', {
 
 testInstruction('RET NC', {
   instruction: 0xd0,
-  duration: flags => (flags.c ? 8 : 20),
+  duration: (flags) => (flags.c ? 8 : 20),
   effect: ({ memory, sp, pc, flags }) => ({
     pc: flags.c ? word(pc + 1) : word(memory[sp] + (memory[sp + 1] << 8)),
     sp: flags.c ? sp : word(sp + 2),
@@ -115,7 +115,7 @@ testInstruction('POP DE', {
 
 testInstruction('CALL NC, a16', {
   instruction: 0xd4,
-  duration: flags => (flags.c ? 12 : 24),
+  duration: (flags) => (flags.c ? 12 : 24),
   size: 3,
   effect: ({ sp, memory, pc, flags }) => ({
     sp: flags.c ? sp : word(sp - 2),
@@ -143,7 +143,7 @@ testInstruction('PUSH DE', {
 
 testInstruction('RET C', {
   instruction: 0xd8,
-  duration: flags => (flags.c ? 20 : 8),
+  duration: (flags) => (flags.c ? 20 : 8),
   effect: ({ memory, sp, pc, flags }) => ({
     pc: flags.c ? word(memory[sp] + (memory[sp + 1] << 8)) : word(pc + 1),
     sp: flags.c ? word(sp + 2) : sp,
@@ -164,7 +164,7 @@ testInstruction('RETI', {
 
 testInstruction('CALL C, a16', {
   instruction: 0xdc,
-  duration: flags => (flags.c ? 24 : 12),
+  duration: (flags) => (flags.c ? 24 : 12),
   size: 3,
   effect: ({ sp, memory, pc, flags }) => ({
     sp: flags.c ? word(sp - 2) : sp,

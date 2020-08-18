@@ -57,7 +57,10 @@ describe('DataSource', () => {
 
   describe('registerBank', () => {
     test('allows access via address or name', () => {
-      let dataSource = registerBank([{ address: 0, name: 'zero' }, { address: 1, name: 'one' }]);
+      let dataSource = registerBank([
+        { address: 0, name: 'zero' },
+        { address: 1, name: 'one' },
+      ]);
 
       expect(dataSource.readByte(0)).toBe(0);
       expect(dataSource.readByte(1)).toBe(0);
