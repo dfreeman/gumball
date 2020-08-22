@@ -1,4 +1,5 @@
 import { registerBank } from '../../src/data-source/register-bank';
+import { addBytes } from '../../src/utils/data';
 
 describe('DataSource', () => {
   describe('registerBank', () => {
@@ -57,6 +58,50 @@ describe('DataSource', () => {
 
       expect(dataSource.readByte(0)).toBe(0b11000001);
       expect(dataSource.register).toBe(0b11000001);
+    });
+
+    test('customizes writing when `write` is specified', () => {
+      let dataSource = registerBank([{ address: 0, name: 'register', write: (n) => addBytes(n, 1).result }]);
+
+      expect(dataSource.readByte(0)).toBe(0);
+      expect(dataSource.register).toBe(0);
+
+      dataSource.register = 0xff;
+
+      expect(dataSource.readByte(0)).toBe(0xff);
+      expect(dataSource.register).toBe(0xff);
+
+      dataSource.writeByte(0, 0);
+
+      expect(dataSource.readByte(0)).toBe(0x01);
+      expect(dataSource.register).toBe(0x01);
+
+      dataSource.writeByte(0, 0xff);
+
+      expect(dataSource.readByte(0)).toBe(0x0);
+      expect(dataSource.register).toBe(0x0);
+    });
+
+    test('customizes reading when `read` is specified', () => {
+      let dataSource = registerBank([{ address: 0, name: 'register', read: (n) => addBytes(n, 1).result }]);
+
+      expect(dataSource.readByte(0)).toBe(1);
+      expect(dataSource.register).toBe(0);
+
+      dataSource.register = 0xff;
+
+      expect(dataSource.readByte(0)).toBe(0);
+      expect(dataSource.register).toBe(0xff);
+
+      dataSource.writeByte(0, 0);
+
+      expect(dataSource.readByte(0)).toBe(0x01);
+      expect(dataSource.register).toBe(0);
+
+      dataSource.writeByte(0, 0xff);
+
+      expect(dataSource.readByte(0)).toBe(0x0);
+      expect(dataSource.register).toBe(0xff);
     });
   });
 });

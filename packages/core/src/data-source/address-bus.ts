@@ -12,14 +12,20 @@ export type AddressMapping = {
   data: DataSource;
 };
 
+/** Creates an address bus with the given mappings */
+export function addressBus(mappings: Array<AddressMapping>): AddressBus {
+  return new AddressBus(mappings);
+}
+
 /**
  * An address bus presents a single unified address space
  * composed of multiple individual data sources. These sources
  * are specified on construction as a set of `AddressMapping`s,
  * and are subsequently addressible collectively.
  */
-export default class AddressBus implements DataSource {
+export class AddressBus implements DataSource {
   private lookup: Array<AddressMapping | undefined>;
+  private unmappedAddressHandler?: (address: number) => void;
 
   public constructor(mappings: Array<AddressMapping>) {
     this.lookup = Array(Math.max(...mappings.map((m) => m.offset + m.length)));
@@ -34,24 +40,32 @@ export default class AddressBus implements DataSource {
     }
   }
 
+  public onUnmappedAddress(handler: (address: number) => void): void {
+    this.unmappedAddressHandler = handler;
+  }
+
   public readByte(address: number): Byte {
-    let { data, offset } = this.findMapping(address);
-    return data.readByte(address - offset);
+    let mapping = this.findMapping(address);
+    if (!mapping) return 0;
+
+    return mapping.data.readByte(address - mapping.offset);
   }
 
   public writeByte(address: number, value: Byte): void {
-    let { data, offset } = this.findMapping(address);
-    data.writeByte(address - offset, value);
+    let mapping = this.findMapping(address);
+    if (!mapping) return;
+
+    mapping.data.writeByte(address - mapping.offset, value);
   }
 
   /**
    * Locates the data source and associated metadata resident
    * at the given address.
    */
-  private findMapping(address: number): AddressMapping {
+  private findMapping(address: number): AddressMapping | undefined {
     let mapping = this.lookup[address];
     if (!mapping) {
-      throw new Error(`Access of unmapped address 0x${address.toString(16)}`);
+      this.unmappedAddressHandler?.(address);
     }
     return mapping;
   }

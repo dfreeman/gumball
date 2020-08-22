@@ -1,33 +1,39 @@
 import DataSource from '.';
 import { Byte } from '../utils/sized-numbers';
 
-export type Guarded<T extends DataSource> = DataSource & { inner: T; lock(value: Byte): void; unlock(): void };
-
-const UNLOCKED = -1 as const;
-
 /**
  * Wraps a given data source, making it unavailable when 'locked'
  */
 export function guarded<T extends DataSource>(inner: T): Guarded<T> {
-  let lockValue: Byte | typeof UNLOCKED = UNLOCKED;
+  return new Guarded(inner);
+}
 
-  return {
-    inner,
-    lock: (value = 0) => (lockValue = value),
-    unlock: () => (lockValue = UNLOCKED),
+const UNLOCKED = -1 as const;
 
-    readByte(address) {
-      if (lockValue === UNLOCKED) {
-        return inner.readByte(address);
-      }
+export class Guarded<T extends DataSource> implements DataSource {
+  private lockValue: Byte | typeof UNLOCKED = UNLOCKED;
 
-      return lockValue;
-    },
+  public constructor(public readonly inner: T) {}
 
-    writeByte(address, value) {
-      if (lockValue === UNLOCKED) {
-        inner.writeByte(address, value);
-      }
-    },
-  };
+  public lock(value: Byte): void {
+    this.lockValue = value;
+  }
+
+  public unlock(): void {
+    this.lockValue = UNLOCKED;
+  }
+
+  public readByte(address: number): Byte {
+    if (this.lockValue === UNLOCKED) {
+      return this.inner.readByte(address);
+    }
+
+    return this.lockValue;
+  }
+
+  public writeByte(address: number, value: Byte): void {
+    if (this.lockValue === UNLOCKED) {
+      this.inner.writeByte(address, value);
+    }
+  }
 }

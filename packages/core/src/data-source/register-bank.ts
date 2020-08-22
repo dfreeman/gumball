@@ -14,9 +14,20 @@ export type RegisterDefinition<Name extends string> = {
    * register is writable.
    */
   writeMask?: number;
-};
 
-export type RegisterBankDataSource<K extends string> = DataSource & Record<K, Byte>;
+  /**
+   * Transforms a value written via `writeByte` into the one
+   * that will actually be persisted. Takes precedence over
+   * `writeMask` if both are specified.
+   */
+  write?: (value: Byte) => Byte;
+
+  /**
+   * Transforms a value read via `readByte` into the one that
+   * will actually be returned.
+   */
+  read?: (value: Byte) => Byte;
+};
 
 /**
  * A data source that maps named registers to an address space,
@@ -24,42 +35,65 @@ export type RegisterBankDataSource<K extends string> = DataSource & Record<K, By
  * and optionally limiting which bits of a register may be written
  * through the numeric address space.
  */
-export function registerBank<K extends string>(registers: Array<RegisterDefinition<K>>): RegisterBankDataSource<K> {
+export function registerBank<K extends string>(
+  registers: ReadonlyArray<RegisterDefinition<K>>,
+): RegisterBankDataSource<K> {
   let data = new Uint8Array(Math.max(...registers.map((r) => r.address)) + 1);
-  let index = registers.reduce((acc, register) => {
-    acc[register.address] = register;
-    return acc;
-  }, {} as Record<number, RegisterDefinition<string>>);
-
-  let result = {
-    readByte(address: number): Byte {
-      return data[address] as Byte;
-    },
-
-    writeByte(address: number, value: Byte): void {
-      let writeMask = index[address]?.writeMask;
-      if (typeof writeMask === 'number') {
-        data[address] = (value & writeMask) + (data[address] & ~writeMask);
-      } else {
-        data[address] = value;
-      }
-    },
-  } as RegisterBankDataSource<K>;
+  let result = new RegisterBank(data, registers) as RegisterBankDataSource<K>;
 
   Object.defineProperties(
     result,
-    registers.reduce((acc, register) => {
-      acc[register.name] = {
-        get() {
-          return data[register.address];
+    registers.reduce(
+      (acc, register) => ({
+        ...acc,
+        [register.name]: {
+          get: () => data[register.address],
+          set: (value: Byte) => (data[register.address] = value),
         },
-        set(value: Byte) {
-          data[register.address] = value;
-        },
-      };
-      return acc;
-    }, {} as PropertyDescriptorMap),
+      }),
+      {},
+    ),
   );
 
   return result;
+}
+
+type RegisterBankDataSource<K extends string> = RegisterBank & Record<K, Byte>;
+
+export class RegisterBank implements DataSource {
+  private readonly data: Uint8Array;
+  private readonly index: Record<number, RegisterDefinition<string>>;
+
+  public constructor(data: Uint8Array, registers: ReadonlyArray<RegisterDefinition<string>>) {
+    this.data = data;
+    this.index = registers.reduce((acc, register) => ({ ...acc, [register.address]: register }), {});
+  }
+
+  public readByte(address: number): Byte {
+    let read = this.index[address]?.read;
+    let value = this.data[address] as Byte;
+    if (typeof read === 'function') {
+      value = read(value);
+    }
+
+    return value;
+  }
+
+  public writeByte(address: number, value: Byte): void {
+    let { data } = this;
+    let register = this.index[address];
+    let write = register?.write;
+    if (typeof write === 'function') {
+      data[address] = write(value);
+      return;
+    }
+
+    let writeMask = register?.writeMask;
+    if (typeof writeMask === 'number') {
+      data[address] = (value & writeMask) + (data[address] & ~writeMask);
+      return;
+    }
+
+    data[address] = value;
+  }
 }

@@ -1,4 +1,4 @@
-import AddressBus from '../../src/data-source/address-bus';
+import { addressBus } from '../../src/data-source/address-bus';
 import { nil } from '../../src/data-source/nil';
 import { buffer } from '../../src/data-source/buffer';
 import { byte } from '../../src/utils/sized-numbers';
@@ -6,22 +6,30 @@ import { byte } from '../../src/utils/sized-numbers';
 describe('AddressBus', () => {
   test('rejects overlapping mappings', () => {
     expect(() => {
-      new AddressBus([
+      addressBus([
         { offset: 0, length: 4, data: nil() },
         { offset: 3, length: 1, data: nil() },
       ]);
     }).toThrow('Address mapping overlap at 0x3');
   });
 
-  test('throws when accessing an unmapped address', () => {
-    let bus = new AddressBus([{ offset: 0, length: 4, data: nil() }]);
-    expect(() => bus.readByte(0x10)).toThrow('Access of unmapped address 0x10');
+  test('invokes the given handler when accessing an unmapped address', () => {
+    let givenAddress: number | undefined;
+    let bus = addressBus([{ offset: 0, length: 4, data: nil() }]);
+
+    bus.onUnmappedAddress((addr) => (givenAddress = addr));
+
+    expect(bus.readByte(0x10)).toBe(0);
+    expect(givenAddress).toBe(0x10);
+
+    bus.writeByte(0x20, 0xff);
+    expect(givenAddress).toBe(0x20);
   });
 
   test('reads from mapped locations', () => {
     let a = buffer(0x10);
     let b = buffer(0x10);
-    let bus = new AddressBus([
+    let bus = addressBus([
       { offset: 0, length: 0x10, data: a },
       { offset: 0x10, length: 0x10, data: b },
     ]);
@@ -40,7 +48,7 @@ describe('AddressBus', () => {
   test('writes to mapped locations', () => {
     let a = buffer(0x10);
     let b = buffer(0x10);
-    let bus = new AddressBus([
+    let bus = addressBus([
       { offset: 0, length: 0x10, data: a },
       { offset: 0x10, length: 0x10, data: b },
     ]);

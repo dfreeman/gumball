@@ -1,5 +1,11 @@
 import { Byte } from '../utils/sized-numbers';
 
+export { nil } from './nil';
+export { guarded } from './guarded';
+export { buffer } from './buffer';
+export { registerBank } from './register-bank';
+export { addressBus } from './address-bus';
+
 /**
  * The `DataSource` is the core compositional element of
  * this emulator, exposing two simple operations: reading
