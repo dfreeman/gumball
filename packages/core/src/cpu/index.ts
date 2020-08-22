@@ -70,13 +70,21 @@ function instr(opcode: number, name: string, invoke: (cpu: CPU) => Duration): In
 }
 
 export default class CPU {
-  private readonly registers = new Registers();
-  private readonly flags = this.registers.f;
+  public readonly registers = new Registers();
+  public readonly flags = this.registers.f;
 
   private state: State = State.Running;
   private ime = Interrupts.Disabled;
 
   public constructor(private memory: DataSource) {}
+
+  /**
+   * Indicates that the CPU is currently in the running state and ready
+   * to process further instructions. See also `isHalted` and `isStopped`.
+   */
+  public get isRunning(): boolean {
+    return this.state === State.Running;
+  }
 
   /**
    * When the HALT instruction is executed, the system clock is disabled and
@@ -115,23 +123,20 @@ export default class CPU {
   }
 
   /**
-   * Executes instructions until the specified number of clock cycles has
-   * been spent or a `STOP` or `HALT` instruction has been executed,
-   * returning the number of cycles elapsed.
+   * Executes the instruction queued up at the address in `pc`, returning
+   * the number of clock ticks consumed. If the CPU is currently halted
+   * or stopped, does nothing and consumes no time.
    */
-  public step(window = 4): number {
-    let total = 0;
-    while (total < window && this.state === State.Running) {
-      let opcode = this.memory.readByte(this.registers.pc);
-      let instruction = CPU.instructions[opcode];
+  public step(): number {
+    if (!this.isRunning) return 0;
 
-      this.incrementPC();
+    let opcode = this.memory.readByte(this.registers.pc);
+    let instruction = CPU.instructions[opcode];
 
-      total += instruction.invoke(this);
+    this.incrementPC();
 
-      if (this.isHalted || this.isStopped) {
-        break;
-      }
+    return instruction.invoke(this);
+  }
     }
     return total;
   }

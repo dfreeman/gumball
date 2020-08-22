@@ -55,7 +55,7 @@ export default function testInstruction(name: string, options: TestInstructionOp
 
         let expectedDuration = typeof duration === 'function' ? duration(cpu['flags']) : duration;
         let initialRegisters = registers.clone();
-        let actualDuration = cpu.step(expectedDuration);
+        let actualDuration = cpu.step();
 
         let initialMemory = memory.initialState();
         let expectedResult = {
