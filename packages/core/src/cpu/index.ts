@@ -1140,7 +1140,7 @@ export default class CPU {
   }
 
   private jumpRelative(offset: Byte): Duration {
-    this.incrementPC(signedByte(offset) - 2);
+    this.incrementPC(signedByte(offset));
     return 12;
   }
 

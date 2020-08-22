@@ -7,7 +7,7 @@ testInstruction('JR r8', {
   duration: 12,
   size: 2,
   effect: ({ pc, memory }) => ({
-    pc: word(pc + signedByte(memory[pc + 1])),
+    pc: word(pc + 2 + signedByte(memory[pc + 1])),
   }),
 });
 
@@ -16,7 +16,7 @@ testInstruction('JR NZ, r8', {
   duration: (flags) => (flags.z ? 8 : 12),
   size: 2,
   effect: ({ pc, memory, flags }) => ({
-    pc: word(pc + (flags.z ? 2 : signedByte(memory[pc + 1]))),
+    pc: word(pc + 2 + (flags.z ? 0 : signedByte(memory[pc + 1]))),
   }),
 });
 
@@ -25,7 +25,7 @@ testInstruction('JR Z, r8', {
   duration: (flags) => (flags.z ? 12 : 8),
   size: 2,
   effect: ({ pc, memory, flags }) => ({
-    pc: word(pc + (flags.z ? signedByte(memory[pc + 1]) : 2)),
+    pc: word(pc + 2 + (flags.z ? signedByte(memory[pc + 1]) : 0)),
   }),
 });
 
@@ -34,7 +34,7 @@ testInstruction('JR NC, r8', {
   duration: (flags) => (flags.c ? 8 : 12),
   size: 2,
   effect: ({ pc, memory, flags }) => ({
-    pc: word(pc + (flags.c ? 2 : signedByte(memory[pc + 1]))),
+    pc: word(pc + 2 + (flags.c ? 0 : signedByte(memory[pc + 1]))),
   }),
 });
 
@@ -43,7 +43,7 @@ testInstruction('JR C, r8', {
   duration: (flags) => (flags.c ? 12 : 8),
   size: 2,
   effect: ({ pc, memory, flags }) => ({
-    pc: word(pc + (flags.c ? signedByte(memory[pc + 1]) : 2)),
+    pc: word(pc + 2 + (flags.c ? signedByte(memory[pc + 1]) : 0)),
   }),
 });
 
