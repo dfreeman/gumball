@@ -1,6 +1,7 @@
 import testInstruction from '../../helpers/test-instruction';
 import { byte, bit } from '../../../src/utils/sized-numbers';
 import { decimalAdjust } from '../../../src/utils/data';
+import { Interrupts } from '../../../src/cpu';
 
 testInstruction('DAA', {
   instruction: 0x27,
@@ -69,10 +70,10 @@ testInstruction('DI', {
   instruction: 0xf3,
   duration: 4,
   before(cpu) {
-    cpu['ime'] = true;
-    expect(cpu.interruptsEnabled).toBe(true);
+    cpu['ime'] = Interrupts.Disabled;
   },
   after(cpu) {
+    expect(cpu['ime']).toBe(Interrupts.Disabled);
     expect(cpu.interruptsEnabled).toBe(false);
   },
 });
@@ -81,10 +82,10 @@ testInstruction('EI', {
   instruction: 0xfb,
   duration: 4,
   before(cpu) {
-    cpu['ime'] = false;
-    expect(cpu.interruptsEnabled).toBe(false);
+    cpu['ime'] = Interrupts.Enabled;
   },
   after(cpu) {
-    expect(cpu.interruptsEnabled).toBe(true);
+    expect(cpu['ime']).toBe(Interrupts.Enabling);
+    expect(cpu.interruptsEnabled).toBe(false);
   },
 });

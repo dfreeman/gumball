@@ -43,6 +43,20 @@ export enum State {
   Running,
 }
 
+/**
+ * The `ei` instruction actually takes effect after the
+ * following instruction is executed, so an `ei` followed
+ * immediately by a `di` would not allow any interrupts
+ * to be serviced.
+ *
+ * https://gbdev.io/pandocs/#interrupts
+ */
+export enum Interrupts {
+  Disabled,
+  Enabling,
+  Enabled,
+}
+
 class Instruction {
   public constructor(private opcode: number, private name: string, public readonly invoke: (cpu: CPU) => Duration) {}
 
@@ -60,7 +74,7 @@ export default class CPU {
   private readonly flags = this.registers.f;
 
   private state: State = State.Running;
-  private ime = false;
+  private ime = Interrupts.Disabled;
 
   public constructor(private memory: DataSource) {}
 
@@ -97,7 +111,7 @@ export default class CPU {
    * that are set in memory at `0xffff`.
    */
   public get interruptsEnabled(): boolean {
-    return this.ime;
+    return this.ime === Interrupts.Enabled;
   }
 
   /**
@@ -105,7 +119,7 @@ export default class CPU {
    * been spent or a `STOP` or `HALT` instruction has been executed,
    * returning the number of cycles elapsed.
    */
-  public step(window: number): number {
+  public step(window = 4): number {
     let total = 0;
     while (total < window && this.state === State.Running) {
       let opcode = this.memory.readByte(this.registers.pc);
@@ -371,7 +385,7 @@ export default class CPU {
     instr(0xf0, 'LDH A, (a8)', (cpu) => cpu.loadhRA('a', cpu.consumeByteAtPC())),
     instr(0xf1, 'POP AF', (cpu) => cpu.pop('af')),
     instr(0xf2, 'LD A, (C)', (cpu) => cpu.loadhRM('a', 'c')),
-    instr(0xf3, 'DI', (cpu) => cpu.setIME(false)),
+    instr(0xf3, 'DI', (cpu) => cpu.setIME(Interrupts.Disabled)),
     instr(0xf4, 'ILLEGAL_F4', (cpu) => cpu.illegal(0xf4)),
     instr(0xf5, 'PUSH AF', (cpu) => cpu.push('af')),
     instr(0xf6, 'OR d8', (cpu) => cpu.or8RI('a', cpu.consumeByteAtPC())),
@@ -379,7 +393,7 @@ export default class CPU {
     instr(0xf8, 'LD HL, SP + r8', (cpu) => cpu.loadSPRI('hl', cpu.consumeByteAtPC())),
     instr(0xf9, 'LD SP, HL', (cpu) => cpu.load16RR('sp', 'hl')),
     instr(0xfa, 'LD A, (a16)', (cpu) => cpu.load8RA('a', cpu.consumeWordAtPC())),
-    instr(0xfb, 'EI', (cpu) => cpu.setIME(true)),
+    instr(0xfb, 'EI', (cpu) => cpu.setIME(Interrupts.Enabling)),
     instr(0xfc, 'ILLEGAL_FC', (cpu) => cpu.illegal(0xfc)),
     instr(0xfd, 'ILLEGAL_FD', (cpu) => cpu.illegal(0xfd)),
     instr(0xfe, 'CP d8', (cpu) => cpu.compare8RI('a', cpu.consumeByteAtPC())),
@@ -402,7 +416,7 @@ export default class CPU {
     return 4;
   }
 
-  private setIME(value: boolean): Duration {
+  private setIME(value: Interrupts): Duration {
     this.ime = value;
     return 4;
   }
@@ -541,7 +555,7 @@ export default class CPU {
   }
 
   private reti(): Duration {
-    this.ime = true;
+    this.ime = Interrupts.Enabled;
     return this.ret();
   }
 
