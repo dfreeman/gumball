@@ -36,42 +36,31 @@ export type RegisterDefinition<Name extends string> = {
  * through the numeric address space.
  */
 export function registerBank<K extends string>(
-  registers: ReadonlyArray<RegisterDefinition<K>>,
+  definitions: ReadonlyArray<RegisterDefinition<K>>,
 ): RegisterBankDataSource<K> {
-  let data = new Uint8Array(Math.max(...registers.map((r) => r.address)) + 1);
-  let result = new RegisterBank(data, registers) as RegisterBankDataSource<K>;
-
-  Object.defineProperties(
-    result,
-    registers.reduce(
-      (acc, register) => ({
-        ...acc,
-        [register.name]: {
-          get: () => data[register.address],
-          set: (value: Byte) => (data[register.address] = value),
-        },
-      }),
-      {},
-    ),
-  );
-
-  return result;
+  return new RegisterBankDataSource(definitions);
 }
 
-type RegisterBankDataSource<K extends string> = RegisterBank & Record<K, Byte>;
+export class RegisterBankDataSource<K extends string> implements DataSource {
+  private readonly index: Array<RegisterDefinition<K>>;
+  public readonly values: Record<K, Byte>;
 
-export class RegisterBank implements DataSource {
-  private readonly data: Uint8Array;
-  private readonly index: Record<number, RegisterDefinition<string>>;
+  public constructor(definitions: ReadonlyArray<RegisterDefinition<K>>) {
+    this.values = Object.create(null);
+    this.index = Array(Math.max(...definitions.map((r) => r.address)) + 1);
 
-  public constructor(data: Uint8Array, registers: ReadonlyArray<RegisterDefinition<string>>) {
-    this.data = data;
-    this.index = registers.reduce((acc, register) => ({ ...acc, [register.address]: register }), {});
+    for (let definition of definitions) {
+      this.values[definition.name] = 0;
+      this.index[definition.address] = definition;
+    }
   }
 
   public readByte(address: number): Byte {
+    let register = this.index[address];
+    if (!register) return 0;
+
     let read = this.index[address]?.read;
-    let value = this.data[address] as Byte;
+    let value = this.values[register.name];
     if (typeof read === 'function') {
       value = read(value);
     }
@@ -80,20 +69,21 @@ export class RegisterBank implements DataSource {
   }
 
   public writeByte(address: number, value: Byte): void {
-    let { data } = this;
     let register = this.index[address];
-    let write = register?.write;
+    if (!register) return;
+
+    let { values: registers } = this;
+    let { write, writeMask, name } = register;
     if (typeof write === 'function') {
-      data[address] = write(value);
+      registers[name] = write(value);
       return;
     }
 
-    let writeMask = register?.writeMask;
     if (typeof writeMask === 'number') {
-      data[address] = (value & writeMask) + (data[address] & ~writeMask);
+      registers[name] = ((value & writeMask) + (registers[name] & ~writeMask)) as Byte;
       return;
     }
 
-    data[address] = value;
+    registers[name] = value;
   }
 }
