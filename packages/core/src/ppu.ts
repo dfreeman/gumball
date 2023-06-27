@@ -1,7 +1,8 @@
 import { registerBank } from './data-source/register-bank';
 import { buffer } from './data-source/buffer';
 import { guarded } from './data-source/guarded';
-import { byte, bit, Byte } from './utils/sized-numbers';
+import { byte, bit } from './utils/sized-numbers';
+import { label, flag, value, palette, tables, atom } from './utils/debug';
 
 /**
  * The Picture Processing Unit acts as the interface between
@@ -70,6 +71,38 @@ export default class PPU {
     } else {
       this.ram.unlock();
     }
+  }
+
+  public inspect(): string {
+    let { lcdc, stat, scy, scx, ly, lyc, wy, wx, bgp, obp0, obp1, dma } = this.registers.values;
+
+    return tables({
+      'PPU Registers': [
+        [label.byte('scx'), value(scx), label.byte('scy'), value(scy)],
+        [label.byte('wx'), value(wx), label.byte('wy'), value(wy)],
+        [label.byte('ly'), value(ly), label.byte('lyc'), value(lyc)],
+        [label.byte('obp0'), palette(obp0, 3), label.byte('obp1'), palette(obp1, 3)],
+        [label.byte('bgp'), palette(bgp, 4), label.byte('dma'), value(dma * 0x100, 4)],
+      ],
+      LCDC: [
+        [label.bit('LCD'), flag(lcdc, 7)],
+        [label.bit('Window Tile Map'), flag(lcdc, 6, '0x9c00', '0x9800')],
+        [label.bit('Window Display'), flag(lcdc, 5)],
+        [label.bit('BG & Window Tile Data'), flag(lcdc, 4, '0x8800', '0x8000')],
+        [label.bit('BG Tile Map Display'), flag(lcdc, 3, '0x9c00', '0x9800')],
+        [label.bit('Sprite Size'), flag(lcdc, 2, '8x16', '8x8')],
+        [label.bit('Sprite Display'), flag(lcdc, 1)],
+        [label.bit('BG/Window Display'), flag(lcdc, 0)],
+      ],
+      STAT: [
+        [label.bit('Mode'), atom(PPUMode[this.mode])],
+        [label.bit('LYC=LY Interrupt'), flag(stat, 6)],
+        [label.bit('OAMSearch Interrupt'), flag(stat, 5)],
+        [label.bit('VBlank Interrupt'), flag(stat, 4)],
+        [label.bit('HBlank Interrupt'), flag(stat, 3)],
+        [label.bit('Coincidence bit'), flag(stat, 2, 'LYC == LY', 'LYC != LY')],
+      ],
+    });
   }
 
   private computeMode(): PPUMode {

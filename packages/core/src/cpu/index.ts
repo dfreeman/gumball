@@ -19,6 +19,9 @@ import {
   shiftRightL,
   swap,
 } from '../utils/data';
+import { table } from 'table';
+import chalk from 'chalk';
+import { label, value, atom, tables } from '../utils/debug';
 
 /**
  * The duration in system clock ticks of an instruction.
@@ -137,8 +140,23 @@ export default class CPU {
 
     return instruction.invoke(this);
   }
-    }
-    return total;
+
+  public inspect(): string {
+    let { a, f, b, c, d, e, h, l, sp, pc, af, bc, de, hl } = this.registers;
+    let flags = FLAG_NAMES.map((flag) => chalk[f[flag] ? 'bold' : 'gray'](flag)).join('');
+
+    return tables({
+      'CPU Registers': [
+        [label.word('af'), value(af, 4), label.byte('a'), value(a), label.byte('f'), flags],
+        [label.word('bc'), value(bc, 4), label.byte('b'), value(b), label.byte('c'), value(c)],
+        [label.word('de'), value(de, 4), label.byte('d'), value(d), label.byte('e'), value(e)],
+        [label.word('hl'), value(hl, 4), label.byte('h'), value(h), label.byte('l'), value(l)],
+      ],
+      Memory: [
+        [label.word('sp'), value(sp, 4), value(readWord(this.memory, sp), 4)],
+        [label.word('pc'), value(pc, 4), atom(CPU.instructions[this.memory.readByte(pc)])],
+      ],
+    });
   }
 
   /**
@@ -1154,14 +1172,12 @@ export default class CPU {
 
   // Prefixed Instructions
 
-  private readonly registerCodes: Array<ByteRegister | 'hl'> = ['b', 'c', 'd', 'e', 'h', 'l', 'hl', 'a'];
-
   private executePrefixedInstruction(): Duration {
     let opcode = this.consumeByteAtPC();
 
     let category = (opcode & 0xc0) >> 6;
     let bit = (opcode & 0x38) >> 3;
-    let register = this.registerCodes[opcode & 0x07];
+    let register = PREFIX_REGISTER_CODES[opcode & 0x07];
 
     switch (category) {
       case 0:
@@ -1297,3 +1313,6 @@ export default class CPU {
     return value;
   }
 }
+
+const FLAG_NAMES: Array<Flag> = ['z', 'n', 'h', 'c'];
+const PREFIX_REGISTER_CODES: Array<ByteRegister | 'hl'> = ['b', 'c', 'd', 'e', 'h', 'l', 'hl', 'a'];
