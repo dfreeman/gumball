@@ -59,7 +59,7 @@ export async function compile(files: Files, options: CompilationOptions = {}): P
   let map = fs.readFileSync(`${root}/rom.map`, 'utf-8');
   let symbols = fs.readFileSync(`${root}/rom.sym`, 'utf-8');
 
-  fs.rmdirSync(root, { recursive: true });
+  fs.rmSync(root, { recursive: true });
 
   return { rom, map, symbols };
 }
