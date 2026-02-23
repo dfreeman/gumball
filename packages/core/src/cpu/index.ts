@@ -77,6 +77,8 @@ export default class CPU {
   public readonly flags = this.registers.f;
 
   private state: State = State.Running;
+
+  /** [Interrupt Master Enable flag](https://gbdev.io/pandocs/Interrupts.html#ime-interrupt-master-enable-flag-write-only) */
   private ime = Interrupts.Disabled;
 
   public constructor(private memory: DataSource) {}
@@ -133,12 +135,18 @@ export default class CPU {
   public step(): number {
     if (!this.isRunning) return 0;
 
+    let previousIME = this.ime;
     let opcode = this.memory.readByte(this.registers.pc);
     let instruction = CPU.instructions[opcode];
 
     this.incrementPC();
 
-    return instruction.invoke(this);
+    let duration = instruction.invoke(this);
+    if (previousIME === Interrupts.Enabling && this.ime === Interrupts.Enabling) {
+      this.ime = Interrupts.Enabled;
+    }
+
+    return duration;
   }
 
   public inspect(): string {
@@ -436,6 +444,7 @@ export default class CPU {
 
   private halt(): Duration {
     this.state = State.Halted;
+    // TODO: Deal with interrupts https://gbdev.io/pandocs/halt.html#halt
     return 4;
   }
 
