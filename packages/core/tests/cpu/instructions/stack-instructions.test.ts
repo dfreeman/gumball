@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import testInstruction from '../../helpers/test-instruction';
 import { word, byte } from '../../../src/utils/sized-numbers';
 

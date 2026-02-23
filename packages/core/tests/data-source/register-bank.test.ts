@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { registerBank } from '../../src/data-source/register-bank';
 import { addBytes } from '../../src/utils/data';
 

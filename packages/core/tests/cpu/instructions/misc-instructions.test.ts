@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import testInstruction from '../../helpers/test-instruction';
 import { byte, bit } from '../../../src/utils/sized-numbers';
 import { decimalAdjust } from '../../../src/utils/data';

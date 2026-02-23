@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { addressBus } from '../../src/data-source/address-bus';
 import { nil } from '../../src/data-source/nil';
 import { buffer } from '../../src/data-source/buffer';

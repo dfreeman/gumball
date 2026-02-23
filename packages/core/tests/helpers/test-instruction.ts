@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import CPU from '../../src/cpu';
 import { Registers, ByteRegister, WordRegister, Flags, Flag } from '../../src/cpu/registers';
 import { Byte, word, Word, byte } from '../../src/utils/sized-numbers';

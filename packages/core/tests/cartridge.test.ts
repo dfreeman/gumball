@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { asm } from './helpers/compile-rom';
 import Cartridge, { CGBSupport, SGBSupport, MBCType } from '../src/cartridge';
 

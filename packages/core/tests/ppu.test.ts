@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import PPU, { PPUMode } from '../src/ppu';
 import * as Constants from '../src/ppu';
 

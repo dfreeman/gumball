@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { byte, word } from '../../src/utils/sized-numbers';
 import { buffer } from '../../src/data-source/buffer';
 import {

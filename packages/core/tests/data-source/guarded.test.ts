@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { buffer } from '../../src/data-source/buffer';
 import { guarded } from '../../src/data-source/guarded';
 

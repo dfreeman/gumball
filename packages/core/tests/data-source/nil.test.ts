@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { nil } from '../../src/data-source/nil';
 
 describe('DataSource', () => {
