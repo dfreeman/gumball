@@ -1,5 +1,5 @@
-import testInstruction from '../../helpers/test-instruction';
-import { word, byte } from '../../../src/utils/sized-numbers';
+import testInstruction from '#tests/helpers/test-instruction';
+import { word, byte } from '#src/utils/sized-numbers';
 
 testInstruction('RST 00H', {
   instruction: 0xc7,

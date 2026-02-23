@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
-import { byte, word } from '../../src/utils/sized-numbers';
-import { buffer } from '../../src/data-source/buffer';
+import { byte, word } from '#src/utils/sized-numbers';
+import { buffer } from '#src/data-sources/buffer';
 import {
   addBytes,
   subtractBytes,
@@ -19,7 +19,7 @@ import {
   shiftRightA,
   shiftRightL,
   swap,
-} from '../../src/utils/data';
+} from '#src/utils/data';
 
 test('addBytes', () => {
   expect(addBytes(byte(0x00), byte(0x00))).toEqual({ result: 0x00, h: 0, c: 0, z: 1 });

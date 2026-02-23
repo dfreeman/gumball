@@ -1,8 +1,8 @@
 import { expect } from 'vitest';
-import testInstruction from '../../helpers/test-instruction';
-import { byte, bit } from '../../../src/utils/sized-numbers';
-import { decimalAdjust } from '../../../src/utils/data';
-import { Interrupts } from '../../../src/cpu';
+import testInstruction from '#tests/helpers/test-instruction';
+import { byte, bit } from '#src/utils/sized-numbers';
+import { decimalAdjust } from '#src/utils/data';
+import { Interrupts } from '#src/cpu';
 
 testInstruction('DAA', {
   instruction: 0x27,

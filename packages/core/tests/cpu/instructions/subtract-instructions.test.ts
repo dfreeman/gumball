@@ -1,5 +1,5 @@
-import testInstruction from '../../helpers/test-instruction';
-import { subtractBytesCarry, subtractBytes } from '../../../src/utils/data';
+import testInstruction from '#tests/helpers/test-instruction';
+import { subtractBytesCarry, subtractBytes } from '#src/utils/data';
 
 testInstruction('SUB A, B', {
   instruction: 0x90,

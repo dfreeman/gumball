@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
-import { asm } from './helpers/compile-rom';
-import Cartridge, { CGBSupport, SGBSupport, MBCType } from '../src/cartridge';
+import { asm } from '#tests/helpers/compile-rom';
+import Cartridge, { CGBSupport, SGBSupport, MBCType } from '#src/cartridge';
 
 describe('Cartridge', () => {
   test('loading a simple ROM', async () => {

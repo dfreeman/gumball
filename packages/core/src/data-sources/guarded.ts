@@ -1,5 +1,5 @@
-import DataSource from '.';
-import { Byte } from '../utils/sized-numbers';
+import DataSource from '#src/data-source';
+import { Byte } from '#src/utils/sized-numbers';
 
 /**
  * Wraps a given data source, making it unavailable when 'locked'

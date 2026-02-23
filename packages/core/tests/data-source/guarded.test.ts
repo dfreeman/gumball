@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
-import { buffer } from '../../src/data-source/buffer';
-import { guarded } from '../../src/data-source/guarded';
+import { buffer } from '#src/data-sources/buffer';
+import { guarded } from '#src/data-sources/guarded';
 
 describe('DataSource', () => {
   test('guarded', () => {

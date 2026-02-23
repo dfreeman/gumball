@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import stripAnsi from 'strip-ansi';
-import { Byte } from './sized-numbers';
 import { table } from 'table';
+import { Byte } from '#src/utils/sized-numbers';
 
 export const label = {
   bit: chalk.cyan,

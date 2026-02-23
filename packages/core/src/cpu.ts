@@ -1,6 +1,6 @@
-import DataSource from '../data-source';
-import { bit, byte, word, Bit, Byte, Word } from '../utils/sized-numbers';
-import { Registers, ByteRegister, WordRegister, Flag } from './registers';
+import DataSource from '#src/data-source';
+import { bit, byte, word, Bit, Byte, Word } from '#src/utils/sized-numbers';
+import { Registers, ByteRegister, WordRegister, Flag } from '#src/cpu/registers';
 import {
   addBytes,
   subtractBytes,
@@ -18,10 +18,9 @@ import {
   shiftRightA,
   shiftRightL,
   swap,
-} from '../utils/data';
-import { table } from 'table';
+} from '#src/utils/data';
 import chalk from 'chalk';
-import { label, value, atom, tables } from '../utils/debug';
+import { label, value, atom, tables } from '#src/utils/debug';
 
 /**
  * The duration in system clock ticks of an instruction.

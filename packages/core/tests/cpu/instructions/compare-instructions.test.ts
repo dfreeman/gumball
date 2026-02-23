@@ -1,5 +1,5 @@
-import testInstruction from '../../helpers/test-instruction';
-import { subtractBytes } from '../../../src/utils/data';
+import testInstruction from '#tests/helpers/test-instruction';
+import { subtractBytes } from '#src/utils/data';
 
 testInstruction('CP B', {
   instruction: 0xb8,

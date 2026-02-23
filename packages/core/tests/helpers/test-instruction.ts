@@ -1,8 +1,8 @@
 import { describe, test, expect } from 'vitest';
-import CPU from '../../src/cpu';
-import { Registers, ByteRegister, WordRegister, Flags, Flag } from '../../src/cpu/registers';
-import { Byte, word, Word, byte } from '../../src/utils/sized-numbers';
-import DataSource from '../../src/data-source';
+import CPU from '#src/cpu';
+import { Registers, ByteRegister, WordRegister, Flags, Flag } from '#src/cpu/registers';
+import { Byte, word, Word, byte } from '#src/utils/sized-numbers';
+import DataSource from '#src/data-source';
 
 type MemoryState = Record<number, Byte>;
 type RegisterState = Pick<Registers, ByteRegister | WordRegister>;

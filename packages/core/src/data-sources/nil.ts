@@ -1,5 +1,5 @@
-import { Byte } from '../utils/sized-numbers';
-import { DataSource } from './index';
+import { Byte } from '#src/utils/sized-numbers';
+import { DataSource } from '#src/data-source';
 
 /**
  * A data source that does nothing at all. Reads always

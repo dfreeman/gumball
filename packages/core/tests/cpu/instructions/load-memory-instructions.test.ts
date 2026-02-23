@@ -1,6 +1,6 @@
-import testInstruction from '../../helpers/test-instruction';
-import { byte, word } from '../../../src/utils/sized-numbers';
-import { addWords, subtractWords, addSignedOffset } from '../../../src/utils/data';
+import testInstruction from '#tests/helpers/test-instruction';
+import { byte, word } from '#src/utils/sized-numbers';
+import { addWords, subtractWords, addSignedOffset } from '#src/utils/data';
 
 testInstruction('LD BC, d16', {
   instruction: 0x01,

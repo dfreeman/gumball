@@ -1,8 +1,8 @@
 import { describe, test, expect } from 'vitest';
-import { addressBus } from '../../src/data-source/address-bus';
-import { nil } from '../../src/data-source/nil';
-import { buffer } from '../../src/data-source/buffer';
-import { byte } from '../../src/utils/sized-numbers';
+import { addressBus } from '#src/data-sources/address-bus';
+import { nil } from '#src/data-sources/nil';
+import { buffer } from '#src/data-sources/buffer';
+import { byte } from '#src/utils/sized-numbers';
 
 describe('AddressBus', () => {
   test('rejects overlapping mappings', () => {

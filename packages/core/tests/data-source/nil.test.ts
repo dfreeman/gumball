@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { nil } from '../../src/data-source/nil';
+import { nil } from '#src/data-sources/nil';
 
 describe('DataSource', () => {
   describe('nil', () => {

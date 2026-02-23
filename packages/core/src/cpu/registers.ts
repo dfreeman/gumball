@@ -1,4 +1,4 @@
-import { Bit, Word, Byte, byte, word, bit } from '../utils/sized-numbers';
+import { Bit, Word, Byte, byte, word, bit } from '#src/utils/sized-numbers';
 
 export type ByteRegister = 'a' | 'b' | 'c' | 'd' | 'e' | 'h' | 'l';
 export type WordRegister = 'af' | 'bc' | 'de' | 'hl' | 'sp' | 'pc';

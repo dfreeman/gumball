@@ -1,11 +1,11 @@
-import DataSource from './data-source';
-import CPU from './cpu';
-import Cartridge from './cartridge';
-import { Byte } from './utils/sized-numbers';
-import { nil } from './data-source/nil';
-import { buffer } from './data-source/buffer';
-import { addressBus } from './data-source/address-bus';
-import PPU from './ppu';
+import DataSource from '#src/data-source';
+import CPU from '#src/cpu';
+import Cartridge from '#src/cartridge';
+import { Byte } from '#src/utils/sized-numbers';
+import { nil } from '#src/data-sources/nil';
+import { buffer } from '#src/data-sources/buffer';
+import { addressBus } from '#src/data-sources/address-bus';
+import PPU from '#src/ppu';
 
 export default class DMG {
   private readonly cartridge: Cartridge;

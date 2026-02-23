@@ -1,6 +1,6 @@
-import testInstruction from '../../helpers/test-instruction';
-import { subtractBytes, addBytes, subtractWords } from '../../../src/utils/data';
-import { word } from '../../../src/utils/sized-numbers';
+import testInstruction from '#tests/helpers/test-instruction';
+import { subtractBytes, addBytes, subtractWords } from '#src/utils/data';
+import { word } from '#src/utils/sized-numbers';
 
 testInstruction('INC BC', {
   instruction: 0x03,

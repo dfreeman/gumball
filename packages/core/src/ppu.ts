@@ -1,8 +1,8 @@
-import { registerBank } from './data-source/register-bank';
-import { buffer } from './data-source/buffer';
-import { guarded } from './data-source/guarded';
-import { byte, bit } from './utils/sized-numbers';
-import { label, flag, value, palette, tables, atom } from './utils/debug';
+import { registerBank } from '#src/data-sources/register-bank';
+import { buffer } from '#src/data-sources/buffer';
+import { guarded } from '#src/data-sources/guarded';
+import { byte, bit } from '#src/utils/sized-numbers';
+import { label, flag, value, palette, tables, atom } from '#src/utils/debug';
 
 /**
  * The Picture Processing Unit acts as the interface between

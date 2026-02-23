@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { globIterate, glob } from 'glob';
 import { execa } from 'execa';
 import { stripIndent } from 'common-tags';
-import { CGBSupport, MBCType, SGBSupport } from '../../src/cartridge/index';
+import { CGBSupport, MBCType, SGBSupport } from '#src/cartridge';
 
 export type Files = string | Uint8Array | { [name: string]: Files };
 

@@ -1,5 +1,5 @@
-import testInstruction from '../../helpers/test-instruction';
-import { addWords, addBytesCarry, addBytes, addSignedOffset } from '../../../src/utils/data';
+import testInstruction from '#tests/helpers/test-instruction';
+import { addWords, addBytesCarry, addBytes, addSignedOffset } from '#src/utils/data';
 
 testInstruction('ADD HL, BC', {
   instruction: 0x09,

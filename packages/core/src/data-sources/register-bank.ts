@@ -1,5 +1,5 @@
-import { Byte } from '../utils/sized-numbers';
-import { DataSource } from './index';
+import { Byte } from '#src/utils/sized-numbers';
+import { DataSource } from '#src/data-source';
 
 export type RegisterDefinition<Name extends string> = {
   /** The address of this register */

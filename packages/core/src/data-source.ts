@@ -1,10 +1,10 @@
-import { Byte } from '../utils/sized-numbers';
+import { Byte } from '#src/utils/sized-numbers';
 
-export { nil } from './nil';
-export { guarded } from './guarded';
-export { buffer } from './buffer';
-export { registerBank } from './register-bank';
-export { addressBus } from './address-bus';
+export { nil } from '#src/data-sources/nil';
+export { guarded } from '#src/data-sources/guarded';
+export { buffer } from '#src/data-sources/buffer';
+export { registerBank } from '#src/data-sources/register-bank';
+export { addressBus } from '#src/data-sources/address-bus';
 
 /**
  * The `DataSource` is the core compositional element of

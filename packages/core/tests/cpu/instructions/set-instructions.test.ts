@@ -1,5 +1,5 @@
-import testInstruction from '../../helpers/test-instruction';
-import { byte } from '../../../src/utils/sized-numbers';
+import testInstruction from '#tests/helpers/test-instruction';
+import { byte } from '#src/utils/sized-numbers';
 
 testInstruction('SET 0 B', {
   instruction: [0xcb, 0xc0],

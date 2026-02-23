@@ -1,6 +1,6 @@
-import testInstruction from '../../helpers/test-instruction';
-import { word } from '../../../src/utils/sized-numbers';
-import { signedByte } from '../../../src/utils/data';
+import testInstruction from '#tests/helpers/test-instruction';
+import { word } from '#src/utils/sized-numbers';
+import { signedByte } from '#src/utils/data';
 
 testInstruction('JR r8', {
   instruction: 0x18,

@@ -1,5 +1,5 @@
-import { Byte, Bit, Word, byte, bit, word } from './sized-numbers';
-import DataSource from '../data-source';
+import { Byte, Bit, Word, byte, bit, word } from '#src/utils/sized-numbers';
+import DataSource from '#src/data-source';
 
 export function addBytes(a: Byte, b: Byte): { result: Byte; h: Bit; c: Bit; z: Bit } {
   let raw = a + b;

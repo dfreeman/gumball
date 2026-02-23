@@ -1,4 +1,4 @@
-import testInstruction from '../../helpers/test-instruction';
+import testInstruction from '#tests/helpers/test-instruction';
 
 testInstruction('LD B, B', {
   instruction: 0x40,

@@ -1,7 +1,7 @@
-import { byte, Byte } from '../utils/sized-numbers.js';
-import DataSource from '../data-source/index.js';
-import { buffer } from '../data-source/buffer.js';
-import { nil } from '../data-source/nil.js';
+import { byte, Byte } from '#src/utils/sized-numbers';
+import DataSource from '#src/data-source';
+import { buffer } from '#src/data-sources/buffer';
+import { nil } from '#src/data-sources/nil';
 
 const ADDR_LOGO = 0x0104;
 const ADDR_TITLE = 0x0134;

@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
-import { Flags, Registers } from '../../src/cpu/registers';
-import { byte, word } from '../../src/utils/sized-numbers';
+import { Flags, Registers } from '#src/cpu/registers';
+import { byte, word } from '#src/utils/sized-numbers';
 
 describe('Flags', () => {
   test('z flag', () => {

@@ -1,5 +1,5 @@
 import { expect } from 'vitest';
-import testInstruction from '../../helpers/test-instruction';
+import testInstruction from '#tests/helpers/test-instruction';
 
 testInstruction('NOP', {
   duration: 4,

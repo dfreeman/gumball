@@ -1,5 +1,5 @@
-import testInstruction from '../../helpers/test-instruction';
-import { swap } from '../../../src/utils/data';
+import testInstruction from '#tests/helpers/test-instruction';
+import { swap } from '#src/utils/data';
 
 testInstruction('SWAP B', {
   instruction: [0xcb, 0x30],

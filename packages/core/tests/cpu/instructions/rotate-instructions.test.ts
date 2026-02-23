@@ -1,6 +1,6 @@
-import testInstruction from '../../helpers/test-instruction';
-import { rotateLeft, rotateRight } from '../../../src/utils/data';
-import { bit } from '../../../src/utils/sized-numbers';
+import testInstruction from '#tests/helpers/test-instruction';
+import { rotateLeft, rotateRight } from '#src/utils/data';
+import { bit } from '#src/utils/sized-numbers';
 
 testInstruction('RLCA', {
   instruction: 0x07,

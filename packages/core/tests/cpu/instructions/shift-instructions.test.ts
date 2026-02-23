@@ -1,5 +1,5 @@
-import testInstruction from '../../helpers/test-instruction';
-import { shiftLeftA, shiftRightA, shiftRightL } from '../../../src/utils/data';
+import testInstruction from '#tests/helpers/test-instruction';
+import { shiftLeftA, shiftRightA, shiftRightL } from '#src/utils/data';
 
 testInstruction('SLA B', {
   instruction: [0xcb, 0x20],
