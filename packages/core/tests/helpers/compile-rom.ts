@@ -1,7 +1,7 @@
-import os from 'os';
-import fs from 'fs';
-import glob from 'glob';
-import execa from 'execa';
+import os from 'node:os';
+import fs from 'node:fs';
+import { globIterate, glob } from 'glob';
+import { execa } from 'execa';
 import { stripIndent } from 'common-tags';
 import { CGBSupport, MBCType, SGBSupport } from '../../src/cartridge';
 
@@ -44,11 +44,11 @@ export async function compile(files: Files, options: CompilationOptions = {}): P
 
   writeFiles(cwd, files);
 
-  for (let source of glob.sync('**/*.asm', { cwd })) {
+  for await (let source of globIterate('**/*.asm', { cwd })) {
     await execa('rgbasm', [source, '-o', source.replace(/\.asm$/, '.o')], { cwd });
   }
 
-  let objectFiles = glob.sync('**/*.o', { cwd });
+  let objectFiles = await glob('**/*.o', { cwd });
   let linkFlags = ['-o', `../rom.gb`, '-m', '../rom.map', '-n', '../rom.sym'];
   let fixFlags = buildFixFlags(options);
 
