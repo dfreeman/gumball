@@ -3,7 +3,7 @@
   "scripts": {
     "lint": "eslint . --cache",
     "build": "tsc --build",
-    "test": "yarn workspaces run test"
+    "test": "pnpm -r test"
   },
   "workspaces": [
     "packages/*"
@@ -15,6 +15,6 @@
   },
   "volta": {
     "node": "24.13.1",
-    "yarn": "1.22.19"
+    "pnpm": "10.30.1"
   }
 }
