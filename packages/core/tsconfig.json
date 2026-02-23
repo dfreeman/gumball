@@ -1,16 +1,7 @@
 {
+  "extends": "../../tsconfig.compiler-options.json",
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
   "compilerOptions": {
-    "target": "ES2019",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "declaration": true,
-    "baseUrl": ".",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "composite": true,
-    "lib": ["es2018", "dom"],
     "outDir": "dist"
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"]
 }

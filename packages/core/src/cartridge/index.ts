@@ -1,8 +1,7 @@
-import { memoize } from '../utils/decorators';
-import { byte, Byte } from '../utils/sized-numbers';
-import DataSource from '../data-source';
-import { buffer } from '../data-source/buffer';
-import { nil } from '../data-source/nil';
+import { byte, Byte } from '../utils/sized-numbers.js';
+import DataSource from '../data-source/index.js';
+import { buffer } from '../data-source/buffer.js';
+import { nil } from '../data-source/nil.js';
 
 const ADDR_LOGO = 0x0104;
 const ADDR_TITLE = 0x0134;
@@ -44,11 +43,13 @@ export default class Cartridge {
   public readonly rom0: DataSource;
   public readonly romX: DataSource;
   public readonly ram: DataSource;
+  public readonly info: CartridgeInfo;
 
   private readonly data: Readonly<Uint8Array>;
 
   public constructor(data: Readonly<Uint8Array>) {
     this.data = data;
+    this.info = this.buildInfo(data);
 
     let mbc = buildMBC(this.info.mbcType, data);
 
@@ -57,8 +58,7 @@ export default class Cartridge {
     this.ram = mbc.ram;
   }
 
-  @memoize public get info(): CartridgeInfo {
-    let { data } = this;
+  private buildInfo(data: Readonly<Uint8Array>): CartridgeInfo {
     let mbcType: MBCType = data[ADDR_CARTRIDGE_TYPE];
     let cgbFlag = data[ADDR_CGB_FLAG];
     let cgbSupport =
