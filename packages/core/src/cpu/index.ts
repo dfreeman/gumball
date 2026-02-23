@@ -61,7 +61,11 @@ export enum Interrupts {
 }
 
 class Instruction {
-  public constructor(private opcode: number, private name: string, public readonly invoke: (cpu: CPU) => Duration) {}
+  public constructor(
+    private opcode: number,
+    private name: string,
+    public readonly invoke: (cpu: CPU) => Duration,
+  ) {}
 
   public toString(): string {
     return `Instruction 0x${this.opcode.toString(16).padStart(2, '0')} (${this.name})`;
