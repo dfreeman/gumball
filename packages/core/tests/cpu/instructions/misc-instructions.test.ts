@@ -1,7 +1,7 @@
 import { expect } from 'vitest';
 import testInstruction from '#tests/helpers/test-instruction';
 import { byte, bit } from '#src/utils/sized-numbers';
-import { decimalAdjust } from '#src/utils/data';
+import { addWords, decimalAdjust } from '#src/utils/data';
 import { Interrupts } from '#src/cpu';
 
 testInstruction('DAA', {
@@ -61,12 +61,6 @@ testInstruction('HALT', {
   },
 });
 
-// testInstruction('PREFIX', {
-//   instruction: 0xcb,
-//   duration: 4,
-//   effect: () => ({}),
-// });
-
 testInstruction('DI', {
   instruction: 0xf3,
   duration: 4,
@@ -89,6 +83,8 @@ testInstruction('EI', {
     expect(cpu['ime']).toBe(Interrupts.Enabling);
     expect(cpu.interruptsEnabled).toBe(false);
 
+    // Ensure the next instruction is a NOP; we just care that the IME updates
+    cpu['memory'].writeByte(cpu['registers'].pc, 0x00);
     cpu.step();
 
     expect(cpu['ime']).toBe(Interrupts.Enabled);
